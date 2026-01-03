@@ -131,6 +131,11 @@ npm run build
 - private pdf compare
 - pdf file comparison
 - document comparison tool
+- pdf diff cli
+- pdf compare command line
+- npx pdf-diff
+- pdf comparison automation
+- ci pdf comparison
 
 ### Long-tail Keywords
 - compare two pdf files online
@@ -139,6 +144,11 @@ npm run build
 - private pdf file comparison
 - compare pdf documents in browser
 - client-side pdf comparison
+- pdf diff command line tool
+- compare pdf files in terminal
+- pdf comparison ci cd
+- automated pdf comparison tool
+- npx pdf diff without install
 
 ## 🔍 Testing Tools
 
