@@ -2,13 +2,14 @@
 
 > 🔒 Compare PDF documents privately and securely in your browser. No uploads, no servers, 100% client-side processing.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://www.pdf-diff.com)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR_SITE_ID/deploy-status)](https://pdf-diff.netlify.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://pdf-diff.netlify.app)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/jamesmontemagno/pdf-diff)](https://github.com/jamesmontemagno/pdf-diff/stargazers)
 
 ![PDF Diff Screenshot](https://github.com/user-attachments/assets/25448695-50dc-4b62-b6e0-3cb0d506774a)
 
-**[Try it now at www.pdf-diff.com →](https://www.pdf-diff.com)**
+**[Try it now at pdf-diff.netlify.app →](https://pdf-diff.netlify.app)**
 
 ## ✨ Features
 
@@ -79,7 +80,7 @@ npx pdf-diff --interactive
 
 ### Using the Web App
 
-1. Visit **[www.pdf-diff.com](https://www.pdf-diff.com)**
+1. Visit **[pdf-diff.netlify.app](https://pdf-diff.netlify.app)**
 2. Upload or drag your **original PDF**
 3. Upload or drag your **modified PDF**
 4. View comparison results instantly
@@ -155,4 +156,4 @@ Give a ⭐️ if this project helped you!
 
 ---
 
-**[Start comparing PDFs now →](https://www.pdf-diff.com)**
+**[Start comparing PDFs now →](https://pdf-diff.netlify.app)**
