@@ -1,6 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// Note: In Node.js CLI context, we duplicate magic bytes check here
+// to avoid importing browser-specific validation utilities
+const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46] as const; // %PDF
+
 // Dynamic import for pdfjs-dist (use legacy build for Node.js compatibility)
 let pdfjsLib: typeof import('pdfjs-dist/legacy/build/pdf.mjs') | null = null;
 
@@ -54,10 +58,13 @@ export async function extractTextFromPDFFile(filePath: string): Promise<PDFDocum
   
   const data = new Uint8Array(fs.readFileSync(realPath));
   
-  // Security: Verify PDF magic bytes
+  // Security: Verify PDF magic bytes (%PDF header)
+  // Note: Intentionally duplicated from validation.ts to avoid cross-target imports
   if (data.length < 4 || 
-      data[0] !== 0x25 || data[1] !== 0x50 || 
-      data[2] !== 0x44 || data[3] !== 0x46) { // %PDF
+      data[0] !== PDF_MAGIC_BYTES[0] || 
+      data[1] !== PDF_MAGIC_BYTES[1] || 
+      data[2] !== PDF_MAGIC_BYTES[2] || 
+      data[3] !== PDF_MAGIC_BYTES[3]) {
     throw new Error('File does not appear to be a valid PDF (invalid header)');
   }
   

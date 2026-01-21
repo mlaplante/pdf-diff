@@ -137,8 +137,10 @@ function App() {
       
       setOriginalDoc(originalDoc);
       setModifiedDoc(modifiedDoc);
-    } catch {
-      setError('Failed to load demo PDFs. Please try again.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Failed to load demo PDFs:', err);
+      setError(`Failed to load demo PDFs: ${message}. Please try again.`);
     } finally {
       setIsProcessing(false);
     }

@@ -10,10 +10,14 @@ export const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
 /**
  * PDF magic bytes - PDF files must start with %PDF
  */
-const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46]; // %PDF
+export const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46] as const; // %PDF
 
 /**
- * Validates if data contains PDF magic bytes
+ * Validates if data contains PDF magic bytes.
+ * This can be used in both browser and Node.js environments.
+ * 
+ * @param data - Byte array to check
+ * @returns true if data starts with %PDF header
  */
 export function isPDFMagicBytes(data: Uint8Array): boolean {
   if (data.length < 4) {
@@ -47,7 +51,7 @@ export async function validatePDFFile(file: File): Promise<ValidationResult> {
   }
 
   // Check MIME type (first line of defense)
-  if (!file.type.includes('pdf')) {
+  if (file.type !== 'application/pdf') {
     return {
       valid: false,
       error: 'Invalid file type. Please upload a PDF file.',
