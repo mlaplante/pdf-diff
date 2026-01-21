@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import './DiffStats.css';
 
 interface DiffStatsProps {
@@ -8,7 +9,11 @@ interface DiffStatsProps {
   changePercentage: number;
 }
 
-export function DiffStats({ additions, deletions, unchanged }: DiffStatsProps) {
+/**
+ * DiffStats component displays statistics about PDF differences.
+ * Memoized to prevent unnecessary re-renders.
+ */
+export const DiffStats = memo(function DiffStats({ additions, deletions, unchanged }: DiffStatsProps) {
   const total = additions + deletions + unchanged;
   const additionPercent = total > 0 ? (additions / total) * 100 : 0;
   const deletionPercent = total > 0 ? (deletions / total) * 100 : 0;
@@ -50,4 +55,4 @@ export function DiffStats({ additions, deletions, unchanged }: DiffStatsProps) {
       </div>
     </div>
   );
-}
+});

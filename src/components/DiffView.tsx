@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { DiffPart } from '../utils/diffUtils';
 import './DiffView.css';
 
@@ -8,7 +9,11 @@ interface DiffViewProps {
   modifiedText?: string;
 }
 
-export function DiffView({ parts, mode, originalText, modifiedText }: DiffViewProps) {
+/**
+ * DiffView component displays PDF comparison results in various modes.
+ * Memoized to prevent unnecessary re-renders when props haven't changed.
+ */
+export const DiffView = memo(function DiffView({ parts, mode, originalText, modifiedText }: DiffViewProps) {
   if (mode === 'side-by-side' && originalText !== undefined && modifiedText !== undefined) {
     return (
       <div className="diff-view side-by-side">
@@ -162,4 +167,4 @@ export function DiffView({ parts, mode, originalText, modifiedText }: DiffViewPr
       </div>
     </div>
   );
-}
+});

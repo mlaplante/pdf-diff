@@ -51,8 +51,9 @@ export function PDFDropZone({ label, file, onFileSelect, disabled = false }: PDF
         onChange={handleFileInput}
         id={`file-input-${label.replace(/\s+/g, '-').toLowerCase()}`}
         disabled={disabled}
+        aria-label={`Upload ${label}`}
       />
-      <label htmlFor={`file-input-${label.replace(/\s+/g, '-').toLowerCase()}`}>
+      <label htmlFor={`file-input-${label.replace(/\s+/g, '-').toLowerCase()}`} aria-label={`Drop zone for ${label}`}>
         <div className="dropzone-content">
           <div className="dropzone-icon">
             {file ? (
