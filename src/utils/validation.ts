@@ -24,12 +24,8 @@ export function isPDFMagicBytes(data: Uint8Array): boolean {
     return false;
   }
   
-  return (
-    data[0] === PDF_MAGIC_BYTES[0] &&
-    data[1] === PDF_MAGIC_BYTES[1] &&
-    data[2] === PDF_MAGIC_BYTES[2] &&
-    data[3] === PDF_MAGIC_BYTES[3]
-  );
+  // Use array comparison for concise and readable validation
+  return data.slice(0, 4).every((byte, i) => byte === PDF_MAGIC_BYTES[i]);
 }
 
 /**
@@ -81,13 +77,21 @@ export async function validatePDFFile(file: File): Promise<ValidationResult> {
 
 /**
  * Format file size in human-readable format
+ * 
+ * @param bytes - File size in bytes
+ * @returns Formatted string with appropriate unit (Bytes, KB, MB, GB)
  */
 export function formatFileSize(bytes: number): string {
+  // Handle edge cases
+  if (bytes < 0) return '0 Bytes';
   if (bytes === 0) return '0 Bytes';
   
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const i = Math.min(
+    Math.floor(Math.log(bytes) / Math.log(k)),
+    sizes.length - 1
+  );
   
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }

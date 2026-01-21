@@ -103,5 +103,16 @@ describe('validation', () => {
       const size = 500 * 1024 * 1024; // 500MB
       expect(formatFileSize(size)).toBe('500 MB');
     });
+    
+    it('should handle negative bytes as edge case', () => {
+      expect(formatFileSize(-100)).toBe('0 Bytes');
+    });
+    
+    it('should handle extremely large files without array bounds error', () => {
+      const extremelyLarge = 1024 * 1024 * 1024 * 1024 * 10; // 10TB
+      const result = formatFileSize(extremelyLarge);
+      expect(result).toContain('GB'); // Should cap at GB
+      expect(result).not.toContain('undefined');
+    });
   });
 });
