@@ -15,6 +15,7 @@ import { extractTextFromPDF } from './utils/pdfUtils';
 import type { PDFDocument } from './utils/pdfUtils';
 import { computeTextDiff, computeStats } from './utils/diffUtils';
 import type { DiffPart, DiffStats } from './utils/diffUtils';
+import { validatePDFFile } from './utils/validation';
 import { exportDiffToPDF } from './utils/exportUtils';
 import './App.css';
 import pdfIcon from '/pdf-icon.svg';
@@ -50,12 +51,22 @@ function App() {
   const handleOriginalFile = useCallback(async (file: File) => {
     setOriginalFile(file);
     setError(null);
+    
+    // Validate file first
+    const validation = await validatePDFFile(file);
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid PDF file');
+      return;
+    }
+    
     try {
       setIsProcessing(true);
       const doc = await extractTextFromPDF(file);
       setOriginalDoc(doc);
-    } catch {
-      setError('Failed to process the original PDF. Please try another file.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Failed to process original PDF:', err);
+      setError(`Failed to process the original PDF: ${message}. Please try another file.`);
     } finally {
       setIsProcessing(false);
     }
@@ -64,12 +75,22 @@ function App() {
   const handleModifiedFile = useCallback(async (file: File) => {
     setModifiedFile(file);
     setError(null);
+    
+    // Validate file first
+    const validation = await validatePDFFile(file);
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid PDF file');
+      return;
+    }
+    
     try {
       setIsProcessing(true);
       const doc = await extractTextFromPDF(file);
       setModifiedDoc(doc);
-    } catch {
-      setError('Failed to process the modified PDF. Please try another file.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Failed to process modified PDF:', err);
+      setError(`Failed to process the modified PDF: ${message}. Please try another file.`);
     } finally {
       setIsProcessing(false);
     }
@@ -116,7 +137,7 @@ function App() {
       
       setOriginalDoc(originalDoc);
       setModifiedDoc(modifiedDoc);
-    } catch (err) {
+    } catch {
       setError('Failed to load demo PDFs. Please try again.');
     } finally {
       setIsProcessing(false);

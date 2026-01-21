@@ -26,11 +26,40 @@ export async function extractTextFromPDFFile(filePath: string): Promise<PDFDocum
   const pdfjs = await getPdfjs();
   const absolutePath = path.resolve(filePath);
   
+  // Security: Validate the path
   if (!fs.existsSync(absolutePath)) {
     throw new Error(`File not found: ${absolutePath}`);
   }
   
-  const data = new Uint8Array(fs.readFileSync(absolutePath));
+  // Security: Get real path to prevent symlink attacks
+  const realPath = fs.realpathSync(absolutePath);
+  
+  // Security: Verify it's actually a file, not a directory or special file
+  const stats = fs.statSync(realPath);
+  if (!stats.isFile()) {
+    throw new Error(`Path is not a regular file: ${realPath}`);
+  }
+  
+  // Security: Check file extension
+  if (!realPath.toLowerCase().endsWith('.pdf')) {
+    throw new Error(`File must have .pdf extension: ${realPath}`);
+  }
+  
+  // Security: Check file size (500MB limit)
+  const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
+  if (stats.size > MAX_FILE_SIZE) {
+    const sizeMB = Math.round(stats.size / 1024 / 1024);
+    throw new Error(`File size (${sizeMB}MB) exceeds maximum allowed size of 500MB`);
+  }
+  
+  const data = new Uint8Array(fs.readFileSync(realPath));
+  
+  // Security: Verify PDF magic bytes
+  if (data.length < 4 || 
+      data[0] !== 0x25 || data[1] !== 0x50 || 
+      data[2] !== 0x44 || data[3] !== 0x46) { // %PDF
+    throw new Error('File does not appear to be a valid PDF (invalid header)');
+  }
   
   // Configure PDF.js for Node.js text extraction
   const pdf = await pdfjs.getDocument({
